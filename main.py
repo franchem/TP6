@@ -19,9 +19,13 @@ class GameView(ac.Window):
 
         self.dynamics = {}
         self.dynamics["rock"] = attack_animation.Animated_Sprite("assets/animations/rock", mirrored=True)
+        self.dynamics["paper"] = attack_animation.Animated_Sprite("assets/animations/test", mirrored=True, scale=5)
+        self.dynamics["scissors"] = attack_animation.Animated_Sprite("assets/animations/test", mirrored=True, scale=5)
 
     def setup(self):
         self.dynamics["rock"].position = (100, 150)
+        self.dynamics["paper"].position = (250, 150)
+        self.dynamics["scissors"].position = (400, 150)
 
         self.human.position = (250, 300)
         self.human.scale = 2
@@ -37,7 +41,7 @@ class GameView(ac.Window):
     def draw_static(self):
         ac.draw_text("Roche, Papier, Ciseaux", 150, 800, (50, 150, 150), 60)
         # carres blancs
-        ac.draw.draw_lrbt_rectangle_outline(50, 150, 100, 200, (200, 200, 200), 10)
+        ac.draw.draw_lrbt_rectangle_outline(50., 150, 100, 200, (200, 200, 200), 10)
         ac.draw.draw_lrbt_rectangle_outline(200, 300, 100, 200, (200, 200, 200), 10)
         ac.draw.draw_lrbt_rectangle_outline(350, 450, 100, 200, (200, 200, 200), 10)
         # carre rouge
@@ -52,6 +56,8 @@ class GameView(ac.Window):
         self.draw_static()
 
         ac.draw_sprite(self.dynamics["rock"], pixelated=True)
+        ac.draw_sprite(self.dynamics["paper"], pixelated=True)
+        ac.draw_sprite(self.dynamics["scissors"], pixelated=True)
 
         cursorbox.draw_information()
 

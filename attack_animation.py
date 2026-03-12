@@ -2,7 +2,7 @@ import arcade
 from pathlib import Path
 
 class Animated_Sprite(arcade.Sprite):
-    def __init__(self, path, mirrored=False):
+    def __init__(self, path, mirrored=False, scale=0.5):
 
         super().__init__()
 
@@ -22,7 +22,7 @@ class Animated_Sprite(arcade.Sprite):
 
         self.current_delay = 0
         self.animation_delay = 0.1
-        self.scale = 0.5
+        self.scale = scale
         self.playing = False
 
     def update(self, delta_time):
