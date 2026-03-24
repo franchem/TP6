@@ -57,6 +57,8 @@ class Multi_Animation_sprite(arcade.Sprite):
         self.animation_delay = 0.1
         self.scale = scale
         self.playing = False
+
+
     def update(self, delta_time):
         if self.playing:
             self.current_delay += delta_time

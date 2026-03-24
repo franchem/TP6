@@ -5,11 +5,6 @@ import game_state, attack_animation, cursorbox, random
 WINDOW_WIDTH, WINDOW_HEIGHT = 1000, 1000
 WINDOW_TITLE = "Dwayne Johnson, Fichiers Epstein, Couple Lesbienne"
 
-class Choices(Enum):
-    ROCK = 0
-    PAPER = 2
-    SCISSORS = 3
-
 class GameView(ac.Window):
     """
     Main application class.
@@ -40,6 +35,7 @@ class GameView(ac.Window):
         self.dynamics["rock"].position = (100, 150)
         self.dynamics["paper"].position = (280, 150)
         self.dynamics["scissors"].position = (460, 150)
+        self.dynamics["robot"].position = (800, 150)
 
         self.human.position = (280, 350)
         self.human.scale = 2.5
@@ -51,7 +47,7 @@ class GameView(ac.Window):
             self.human_wins = 0
             self.robot_wins = 0
         self.state = game_state.State.ROUND_ACTIVE
-        self.clash_result = random.choice(("draw", "com win", "hum win"))
+        self.clash_result = random.choice(("C'est un match nul", "Vous gagnez", "L'ordinateur gagne"))
 
 
     def draw_static(self):
@@ -74,13 +70,19 @@ class GameView(ac.Window):
         ac.draw_sprite(self.dynamics["rock"], pixelated=True)
         ac.draw_sprite(self.dynamics["paper"], pixelated=True)
         ac.draw_sprite(self.dynamics["scissors"], pixelated=True)
+        ac.draw_sprite(self.dynamics["robot"], pixelated=True)
 
         if self.state == game_state.State.NOT_STARTED:
             ac.draw_text("Pesez sur espace pour débuter", 100, 700, (255, 255, 255), 50)
         elif self.state == game_state.State.ROUND_ACTIVE:
             ac.draw_text("Appuyez sur un des trois icones", 100, 700, (255, 255, 255), 50)
+        elif self.state == game_state.State.ROUND_DONE:
+            ac.draw_text(self.clash_result, 100, 700, (255, 0, 0), 50)
+        else:
+            ac.draw_text(self.clash_result+" la partie", 100, 700, (255, 0, 0), 50)
 
-        cursorbox.draw_information()
+        ac.draw_text(f"Vous avez gagné {self.human_wins} fois.", 180, 430, (100, 100, 100), 20)
+        ac.draw_text(f"L'ordi a gagné {self.robot_wins} fois.", 700, 430, (100, 100, 100), 20)
 
     def on_update(self, delta_time: float) -> bool | None:
         for key in self.dynamics:
@@ -97,22 +99,32 @@ class GameView(ac.Window):
 
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         for key in self.dynamics:
-            if self.dynamics[key].collides_with_point((x, y)):
+            if self.dynamics[key].collides_with_point((x, y)) and self.state == game_state.State.ROUND_ACTIVE:
                 self.state = game_state.State.ROUND_DONE
                 if key == "rock":
-                    choice = Choices.ROCK
-                if key == "paper":
-                    choice = Choices.PAPER
+                    choice = 0
+                elif key == "paper":
+                    choice = 1
                 else:
-                    choice = Choices.SCISSORS
+                    choice = 2
 
-                if self.clash_result == "draw":
+                if self.clash_result == "C'est un match nul":
                     self.robot_choice = choice
-                elif self.clash_result == "com win":
+                elif self.clash_result == "L'ordinateur gagne":
                     self.robot_choice = (choice+1)%3
+                    self.robot_wins += 1
                 else:
-                    self.robot_choice = (choice-1)%3
+                    if choice == 0:
+                        self.robot_choice = 2
+                    else:
+                        self.robot_choice = choice-1
+                    self.human_wins += 1
                 self.dynamics["robot"].textures = self.dynamics["robot"].anim_list[self.robot_choice+1]
+                self.dynamics["robot"].set_texture(0)
+
+                if self.robot_wins == 3 or self.human_wins == 3:
+                    self.state = game_state.State.GAME_OVER
+
 def main():
     window = GameView()
     window.setup()
