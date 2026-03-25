@@ -46,8 +46,10 @@ class GameView(ac.Window):
         if self.state == game_state.State.GAME_OVER:
             self.human_wins = 0
             self.robot_wins = 0
+        if self.state != game_state.State.ROUND_ACTIVE:
+            self.dynamics["robot"].textures = self.dynamics["robot"].anim_list[0]
+            self.dynamics["robot"].set_texture(0)
         self.state = game_state.State.ROUND_ACTIVE
-        self.clash_result = random.choice(("C'est un match nul", "Vous gagnez", "L'ordinateur gagne"))
 
 
     def draw_static(self):
@@ -78,6 +80,7 @@ class GameView(ac.Window):
             ac.draw_text("Appuyez sur un des trois icones", 100, 700, (255, 255, 255), 50)
         elif self.state == game_state.State.ROUND_DONE:
             ac.draw_text(self.clash_result, 100, 700, (255, 0, 0), 50)
+            ac.draw_text("Pesez sur espace pour continuer", 100, 650, (255, 255, 255), 30)
         else:
             ac.draw_text(self.clash_result+" la partie", 100, 700, (255, 0, 0), 50)
 
@@ -108,17 +111,16 @@ class GameView(ac.Window):
                 else:
                     choice = 2
 
-                if self.clash_result == "C'est un match nul":
-                    self.robot_choice = choice
-                elif self.clash_result == "L'ordinateur gagne":
-                    self.robot_choice = (choice+1)%3
-                    self.robot_wins += 1
-                else:
-                    if choice == 0:
-                        self.robot_choice = 2
-                    else:
-                        self.robot_choice = choice-1
+                self.robot_choice = random.randint(0, 2)
+                if choice == self.robot_choice:
+                    self.clash_result = "C'est un match nul"
+                elif choice == self.robot_choice+1 or (choice == 0 and self.robot_choice == 2):
+                    self.clash_result = "Vous gagnez"
                     self.human_wins += 1
+                else:
+                    self.clash_result = "L'ordinateur gagne"
+                    self.robot_wins += 1
+
                 self.dynamics["robot"].textures = self.dynamics["robot"].anim_list[self.robot_choice+1]
                 self.dynamics["robot"].set_texture(0)
 
