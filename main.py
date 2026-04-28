@@ -3,7 +3,7 @@ from pyglet.event import EVENT_HANDLE_STATE
 from enum import Enum
 import game_state, attack_animation, cursorbox, random
 WINDOW_WIDTH, WINDOW_HEIGHT = 1000, 1000
-WINDOW_TITLE = "Dwayne Johnson, Fichiers Epstein, Couple Lesbienne"
+WINDOW_TITLE = "Roche, Papier, Ciseaux"
 
 class GameView(ac.Window):
     """
@@ -14,8 +14,8 @@ class GameView(ac.Window):
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
         self.state = game_state.State.NOT_STARTED
 
-        self.human = ac.Sprite("assets/human.png")
-        self.computer = ac.Sprite("assets/compy.png")
+        self.human = ac.Sprite("assets/human.png", scale=2.5)
+        self.computer = ac.Sprite("assets/compy.png", scale=2.5)
 
         self.dynamics = {}
         self.dynamics["rock"] = attack_animation.Animated_Sprite("assets/animations/rock", mirrored=True, scale=5)
@@ -38,9 +38,7 @@ class GameView(ac.Window):
         self.dynamics["robot"].position = (800, 150)
 
         self.human.position = (280, 350)
-        self.human.scale = 2.5
         self.computer.position = (800, 350)
-        self.computer.scale = 2.5
 
     def on_key_press(self, symbol: int, modifiers: int) -> EVENT_HANDLE_STATE:
         if self.state == game_state.State.GAME_OVER:
@@ -87,7 +85,7 @@ class GameView(ac.Window):
         ac.draw_text(f"Vous avez gagné {self.human_wins} fois.", 180, 430, (100, 100, 100), 20)
         ac.draw_text(f"L'ordi a gagné {self.robot_wins} fois.", 700, 430, (100, 100, 100), 20)
 
-    def on_update(self, delta_time: float) -> bool | None:
+    def on_update(self, delta_time: float):
         for key in self.dynamics:
             self.dynamics[key].update(delta_time)
 
