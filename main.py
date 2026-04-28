@@ -1,7 +1,7 @@
 import arcade as ac
 from pyglet.event import EVENT_HANDLE_STATE
 from enum import Enum
-import game_state, attack_animation, cursorbox, random
+import game_state, attack_animation, random
 WINDOW_WIDTH, WINDOW_HEIGHT = 1000, 1000
 WINDOW_TITLE = "Roche, Papier, Ciseaux"
 
@@ -90,8 +90,6 @@ class GameView(ac.Window):
             self.dynamics[key].update(delta_time)
 
     def on_mouse_motion(self, x: float, y: float, shit, shit2):
-        cursorbox.mouseX = x
-        cursorbox.mouseY = y
         for key in self.dynamics:
             if self.dynamics[key].collides_with_point((x, y)):
                 self.dynamics[key].playing = True
