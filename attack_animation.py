@@ -1,6 +1,7 @@
 import arcade
 from pathlib import Path
 
+
 class Animated_Sprite(arcade.Sprite):
     def __init__(self, path, mirrored=False, scale=1):
 
@@ -35,6 +36,7 @@ class Animated_Sprite(arcade.Sprite):
                 if self.cur_texture_index == len(self.textures):
                     self.cur_texture_index = 0
 
+
 class Multi_Animation_sprite(arcade.Sprite):
     def __init__(self, lst, mirrored=False, scale=1):
         super().__init__()
@@ -57,7 +59,6 @@ class Multi_Animation_sprite(arcade.Sprite):
         self.animation_delay = 0.1
         self.scale = scale
         self.playing = False
-
 
     def update(self, delta_time):
         if self.playing:
