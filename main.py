@@ -1,9 +1,11 @@
 import arcade as ac
 from pyglet.event import EVENT_HANDLE_STATE
-from enum import Enum
-import game_state, attack_animation, random
+import game_state
+import attack_animation
+import random
 WINDOW_WIDTH, WINDOW_HEIGHT = 1000, 1000
 WINDOW_TITLE = "Roche, Papier, Ciseaux"
+
 
 class GameView(ac.Window):
     """
@@ -18,13 +20,17 @@ class GameView(ac.Window):
         self.computer = ac.Sprite("assets/compy.png", scale=2.5)
 
         self.dynamics = {}
-        self.dynamics["rock"] = attack_animation.Animated_Sprite("assets/animations/rock", mirrored=True, scale=5)
-        self.dynamics["paper"] = attack_animation.Animated_Sprite("assets/animations/paper", mirrored=True, scale=5)
-        self.dynamics["scissors"] = attack_animation.Animated_Sprite("assets/animations/scissors", mirrored=True, scale=5)
+        self.dynamics["rock"] = attack_animation.Animated_Sprite("assets/animations/rock",
+                                                                 mirrored=True, scale=5)
+        self.dynamics["paper"] = attack_animation.Animated_Sprite("assets/animations/paper",
+                                                                  mirrored=True, scale=5)
+        self.dynamics["scissors"] = attack_animation.Animated_Sprite("assets/animations/scissors",
+                                                                     mirrored=True, scale=5)
         self.dynamics["robot"] = attack_animation.Multi_Animation_sprite(["assets/animations/test",
                                                                           "assets/animations/rock",
                                                                           "assets/animations/paper",
-                                                                          "assets/animations/scissors"], mirrored=True, scale=5)
+                                                                          "assets/animations/scissors"],
+                                                                         mirrored=True, scale=5)
 
         self.human_wins = 0
         self.robot_wins = 0
@@ -48,7 +54,6 @@ class GameView(ac.Window):
             self.dynamics["robot"].textures = self.dynamics["robot"].anim_list[0]
             self.dynamics["robot"].set_texture(0)
         self.state = game_state.State.ROUND_ACTIVE
-
 
     def draw_static(self):
         ac.draw_text("Roche, Papier, Ciseaux", 150, 800, (50, 150, 150), 60)
@@ -122,6 +127,7 @@ class GameView(ac.Window):
 
                 if self.robot_wins == 3 or self.human_wins == 3:
                     self.state = game_state.State.GAME_OVER
+
 
 def main():
     window = GameView()
