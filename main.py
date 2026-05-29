@@ -1,3 +1,8 @@
+"""
+Mika Franche
+Mai 2026
+Roche Papier Ciseaux
+"""
 import arcade as ac
 from pyglet.event import EVENT_HANDLE_STATE
 import game_state
