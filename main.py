@@ -126,9 +126,11 @@ class GameView(ac.Window):
                 else:
                     self.clash_result = "L'ordinateur gagne"
                     self.robot_wins += 1
-
+                
                 self.dynamics["robot"].textures = self.dynamics["robot"].anim_list[self.robot_choice+1]
+                self.dynamics["robot"].cur_texture_index = 0
                 self.dynamics["robot"].set_texture(0)
+                
 
                 if self.robot_wins == 3 or self.human_wins == 3:
                     self.state = game_state.State.GAME_OVER
